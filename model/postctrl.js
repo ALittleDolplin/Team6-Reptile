@@ -9,9 +9,9 @@ var PostControl = function() {
 
 	var ep = new eventproxy();
 
-	this.getLJList = function (req) {
+	this.getLJList = function (page) {
 		return new Promise((resolve, reject) => {
-			superagent.get(LianJiaList + 'pg' + req.params.page)
+			superagent.get(LianJiaList + 'pg' + page)
 				.end(function (error, result) {
 					var list = parseList(result);
 					resolve(list);
