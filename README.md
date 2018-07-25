@@ -10,6 +10,6 @@
 
 链接中的 page 代表页数，如果爬第一页则链接为 http://localhost:5000/list/1，以此类推。可以将爬取的数据以 json 格式下载下来。
 
-2. 爬取房源详情:  http://localhost:5000/fang/:id
+2. 爬取房源详情:  http://localhost:5000/fang/:page
 
-链接中的 id 为房源的id，该id可以通过上面爬取列表的接口中获取，比如：http://localhost:5000/fang/107100335084。
+链接中的 page和列表中的page相对应，可一次性获取多条房源的信息，比如：http://localhost:5000/fang/1。

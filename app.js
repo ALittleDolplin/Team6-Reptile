@@ -13,9 +13,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(process.env.PORT || 5000);
 
 app.get('/list/:page', function (req, res) {
-  postControl.getLJList(req, res);
+  postControl.getLJList(req).then((list) => {
+    res.send(list);
+  });
 })
 
-app.get('/fang/:id', function (req, res) {
-  postControl.getLJFang(req, res);
+app.get('/fang/:page', function (req, res) {
+  postControl.
+    getLJList(req).
+    then((list) => {
+      return list;
+    })
+    .then((list) => {
+      let fangPromise = [];
+      list.forEach((element) => {
+        fangPromise.push(postControl.getLJFang(element.id));
+      });
+      return Promise.all(fangPromise);
+    })
+    .then(list => {
+      res.send(list);
+    });
 });
