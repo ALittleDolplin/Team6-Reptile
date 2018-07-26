@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(process.env.PORT || 5000);
 
 app.get('/list/:page', function (req, res) {
-  postControl.getLJList(req.params.page).then((list) => {
+  postControl.getLJList(req.query.city, req.params.page).then((list) => {
     res.send(list);
   });
 });
@@ -22,10 +22,11 @@ app.get('/big/list/:page', function (req, res) {
   let page = req.params.page;
   let start = (page - 1) * 20;
   let end = page * 20;
+  let city = req.query.city;
 
   let listPromise = [];
   for (let i = start; i < end; i++) {
-    listPromise.push(postControl.getLJList(i));
+    listPromise.push(postControl.getLJList(city, i));
   }
   Promise.all(listPromise).then((list) => {
     let result = [];
@@ -38,15 +39,17 @@ app.get('/big/list/:page', function (req, res) {
 
 app.get('/fang/:page', function (req, res) {
   let page = req.params.page;
+  let city = req.query.city;
+
   postControl.
-    getLJList(page).
+    getLJList(city, page).
     then((list) => {
       return list;
     })
     .then((list) => {
       let fangPromise = [];
       list.forEach((element) => {
-        fangPromise.push(postControl.getLJFang(element.id));
+        fangPromise.push(postControl.getLJFang(city, element.id));
       });
       return Promise.all(fangPromise);
     })
@@ -59,10 +62,11 @@ app.get('/big/fang/:page', function (req, res) {
   let page = req.params.page;
   let start = (page - 1) * 20;
   let end = page *20;
+  let city = req.query.city;
 
   let listPromise = [];
   for (let i = start; i < end; i++) {
-    listPromise.push(postControl.getLJList(i));
+    listPromise.push(postControl.getLJList(city, i));
   }
   Promise.all(listPromise).then((list) => {
     let result = [];
@@ -74,7 +78,7 @@ app.get('/big/fang/:page', function (req, res) {
     then((list) => {
       let fangPromise = [];
       list.forEach((element) => {
-        fangPromise.push(postControl.getLJFang(element.id));
+        fangPromise.push(postControl.getLJFang(city, element.id));
       });
       return Promise.all(fangPromise);
     })

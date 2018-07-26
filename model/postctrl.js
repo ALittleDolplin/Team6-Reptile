@@ -5,13 +5,21 @@ var eventproxy = require('eventproxy');
 
 var LianJiaList = 'https://sh.lianjia.com/zufang/';
 
+
 var PostControl = function() {
 
 	var ep = new eventproxy();
 
-	this.getLJList = function (page) {
+	function buildUrl (city = 'sh') {
+		let result = 'https://'
+		result += city;
+		result += '.lianjia.com/zufang/';
+		return result;
+	}
+
+	this.getLJList = function (city, page) {
 		return new Promise((resolve, reject) => {
-			superagent.get(LianJiaList + 'pg' + page)
+			superagent.get(buildUrl(city) + 'pg' + page)
 				.end(function (error, result) {
 					var list = parseList(result);
 					resolve(list);
@@ -54,9 +62,9 @@ var PostControl = function() {
 		});
 		return list;
 	};
-	this.getLJFang = function (id) {
+	this.getLJFang = function (city, id) {
 		return new Promise((resolve, reject) => {
-			superagent.get(LianJiaList + id + '.html')
+			superagent.get(buildUrl(city) + id + '.html')
 				.end(function (error, result) {
 					var fang = parseFang(id, result);
 					resolve(fang);
